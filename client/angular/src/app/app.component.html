@@ -10,7 +10,7 @@
         <label for="message">Delay (in seconds)</label>
         <input type="number" class="form-control" formControlName="delay" id="delay" required>
         <div [hidden]="messageForm.get('delay').valid || messageForm.get('delay').pristine"
-        class="alert alert-danger">Delay is required should be and between 0 and 8</div>
+        class="alert alert-danger">Delay is required should be and between 1 and 8</div>
       </div>
 
       <button type="submit" class="btn btn-success" [disabled]="!messageForm.valid">Submit</button>

@@ -20,7 +20,7 @@ export class AppComponent {
   createForm() {
     this.messageForm = this.fb.group({
       message: ['', Validators.required], // <--- the FormControl called "name"
-      delay: [, [Validators.required, Validators.min(0), Validators.max(8)]], // <--- the FormControl called "name"
+      delay: [, [Validators.required, Validators.min(1), Validators.max(8)]], // <--- the FormControl called "name"
     });
   }
 
@@ -29,7 +29,7 @@ export class AppComponent {
       this.messageForm.get('message').value, 
       this.messageForm.get('delay').value, 
       'PENDING')
-    //this.messageForm.reset()
+    this.messageForm.reset()
     this.tasks.unshift(task)
     task.sendToServer(this.http).subscribe(
       (data) => {
