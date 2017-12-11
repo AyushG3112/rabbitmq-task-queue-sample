@@ -5,17 +5,20 @@ queueMgr.createConnection().then(channel =>
   channel.consume(
     config.taskQueueName,
     function(msg) {
+      
       let message = JSON.parse(msg.content.toString());
+      // console.log(message)
+      
       setTimeout(() => {
         console.log(
           JSON.stringify({
             taskId: message.taskId,
-            message: message.message
+            tamessageskId: message.message,
           })
         );
-        process.exit();
+        process.exit(0)
       }, message.timeout);
     },
-    { noAck: true }
+    {noAck: true}
   )
 );

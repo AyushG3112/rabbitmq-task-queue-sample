@@ -21,6 +21,7 @@ class QueueManager {
             if (err) {
               reject(err);
             }
+            ch.prefetch(1);            
             ch.assertQueue(config.taskQueueName, {
               durable: true
             });
@@ -42,6 +43,7 @@ class QueueManager {
             if (err) {
               reject(err);
             }
+            ch.prefetch(1);                        
             ch.assertQueue(config.taskQueueName, {
               durable: true
             });
@@ -55,7 +57,7 @@ class QueueManager {
 
   launchWorker() {
     return childProcess.exec('node lib/worker.js', (error, stdout, stderr) => {
-      let response = JSON.parse(stdout);
+      let response = JSON.parse(stdout.trim());
       this._eventEmitter.emit(response.taskId, response.message);
     });
   }
@@ -67,7 +69,7 @@ class QueueManager {
       message: message,
       timeout
     });
-    channel.sendToQueue(queueName, new Buffer(finalMsg));
+    return channel.sendToQueue(queueName, new Buffer(finalMsg));
   }
 
   isConnected() {
