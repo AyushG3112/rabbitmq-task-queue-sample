@@ -15,22 +15,10 @@ export class TaskModel {
     }
 
     sendToServer(httpClient) {
-        console.log(environment.apiBaseUrl)
         return httpClient.put(environment.apiBaseUrl, {
             message: this.message,
             delay: this.delay
-        }).subscribe(
-            (data) => {
-                console.log(data)
-                if(data.status) {
-                    this.status = 'DONE'
-                }
-            },
-            (error) => {
-                console.log(error)
-                this.status = 'ERROR'
-            }
-        )
+        })
        
     }
 }

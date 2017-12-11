@@ -29,16 +29,19 @@ export class AppComponent {
       this.messageForm.get('message').value, 
       this.messageForm.get('delay').value, 
       'PENDING')
-    this.messageForm.reset()
+    //this.messageForm.reset()
     this.tasks.unshift(task)
-    task.sendToServer(this.http)
-
-    // this.http.put('', {}).subscribe(
-    //   (data) => {
-
-    //   },
-    //   (error) => {
-        
-    //   })
+    task.sendToServer(this.http).subscribe(
+      (data) => {
+          console.log(data)
+          if(data.status) {
+            task.status = 'DONE'
+          }
+      },
+      (error) => {
+          console.log(error)
+          task.status = 'ERROR'
+      }
+  )
     }
 }

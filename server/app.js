@@ -41,6 +41,7 @@ if (cluster.isMaster) {
   app.put('/', (req, res) => {
     const taskId = Date.now() + '' + process.hrtime()[1];
     const worker = queueMgr.launchWorker();
+    console.log(req.body)
     eventEmitter.once(taskId, function(msg) {
       res
         .status(200)
