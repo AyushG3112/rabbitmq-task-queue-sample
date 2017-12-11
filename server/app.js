@@ -1,3 +1,4 @@
+
 const cluster = require('cluster');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -7,7 +8,7 @@ const eventEmitter = new (require('events')).EventEmitter(); //require('./lib/ev
 queueMgr.setEventEmitter(eventEmitter);
 const config = require('./config');
 let channel;
-const PORT = 7000;
+const PORT = config.PORT;
 
 if (cluster.isMaster) {
   for (let i = 0; i < require('os').cpus().length; i++) {
@@ -20,13 +21,12 @@ if (cluster.isMaster) {
   app.use(bodyParser.json());
 
   app.use((req, res, next) => {
-    if (channel) {
+    if(queueMgr.isConnected()) {
       return next();
     }
     queueMgr
       .connect()
-      .then(ch => {
-        channel = ch;
+      .then(() => {
         return next();
       })
       .catch(err => {
@@ -48,11 +48,10 @@ if (cluster.isMaster) {
         .end();
     });
     queueMgr.addTaskToQueue(
-      channel,
       config.taskQueueName,
       taskId,
       req.body.message,
-      req.body.timeout
+      req.body.delay*1000
     );
   });
 

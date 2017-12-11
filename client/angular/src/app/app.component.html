@@ -10,12 +10,28 @@
         <label for="message">Delay (in seconds)</label>
         <input type="number" class="form-control" formControlName="delay" id="delay" required>
         <div [hidden]="messageForm.get('delay').valid || messageForm.get('delay').pristine"
-        class="alert alert-danger">Delay is required and should be greater than 1</div>
+        class="alert alert-danger">Delay is required should be and between 0 and 8</div>
       </div>
 
       <button type="submit" class="btn btn-success" [disabled]="!messageForm.valid">Submit</button>
     
 </form>
 
-<p>Form value: {{ messageForm.value | json }}</p>
-<p>Form status: {{ messageForm.status | json }}</p>
+
+<br>
+
+<div *ngIf = "tasks.length > 0">
+  
+Sent Tasks:
+
+<div *ngFor="let task of tasks">
+  <hr class="seperator">
+  <div class = "infobox">
+    <strong>Message: </strong> {{task.message}}<br>
+    <strong>Delay: </strong> {{task.delay}} seconds<br>
+    <strong>Status: </strong> {{task.status}}
+  </div>
+  </div>
+  <hr class="seperator">
+  
+</div>

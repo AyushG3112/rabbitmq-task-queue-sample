@@ -1,7 +1,7 @@
 let queueMgr = require('./queueManager');
 let config = require('../config');
 
-queueMgr.connect().then(channel =>
+queueMgr.createConnection().then(channel =>
   channel.consume(
     config.taskQueueName,
     function(msg) {
