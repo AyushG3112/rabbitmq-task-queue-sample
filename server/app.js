@@ -1,4 +1,3 @@
-
 const cluster = require('cluster');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -10,13 +9,13 @@ const config = require('./config');
 let channel;
 const PORT = config.PORT;
 
-  const app = express();
+const app = express();
 
-  app.use(cors());
-  app.use(bodyParser.json());
+app.use(cors());
+app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  if(queueMgr.isConnected()) {
+  if (queueMgr.isConnected()) {
     return next();
   }
   queueMgr
@@ -42,12 +41,7 @@ app.put('/', (req, res) => {
       .json({ message: msg, status: true })
       .end();
   });
-  queueMgr.addTaskToQueue(
-    config.taskQueueName,
-    taskId,
-    req.body.message,
-    req.body.delay*1000
-  );
+  queueMgr.addTaskToQueue(config.taskQueueName, taskId, req.body.message, req.body.delay * 1000);
 });
 
 app.use('*', (req, res) => {

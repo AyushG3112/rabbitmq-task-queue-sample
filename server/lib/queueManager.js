@@ -21,7 +21,7 @@ class QueueManager {
             if (err) {
               reject(err);
             }
-            ch.prefetch(1);            
+            ch.prefetch(1);
             ch.assertQueue(config.taskQueueName, {
               durable: true
             });
@@ -39,26 +39,32 @@ class QueueManager {
         if (err) {
           reject(err);
         } else {
-          conn.createChannel((err, ch) => {
-            if (err) {
-              reject(err);
-            }
-            ch.prefetch(1);                        
-            ch.assertQueue(config.taskQueueName, {
-              durable: true
-            });
-            resolve(ch);
-          });
+          resolve(conn);
         }
       });
     });
   }
 
+  createChannel(connection) {
+    return new Promise((resolve, reject) => {
+      connection.createChannel((err, ch) => {
+        if (err) {
+          reject(err);
+        }
+        ch.prefetch(1);
+        ch.assertQueue(config.taskQueueName, {
+          durable: true
+        });
+        resolve(ch);
+      });
+    });
+  }
 
   launchWorker() {
-    return childProcess.exec('node lib/worker.js', (error, stdout, stderr) => {
-      let response = JSON.parse(stdout.trim());
-      this._eventEmitter.emit(response.taskId, response.message);
+    const self = this;
+    return childProcess.exec('node lib/worker.js', function(error, stdout, stderr) {
+      const response = JSON.parse(stdout.trim());
+      self._eventEmitter.emit(response.taskId, response.message);
     });
   }
 

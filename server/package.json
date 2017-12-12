@@ -18,6 +18,8 @@
   "directories": {
     "lib": "lib"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^1.12.5"
+  },
   "description": ""
 }
